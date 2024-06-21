@@ -86,7 +86,7 @@ interface Piece {
 class Pawn implements Piece {
     PImage img;
     Pawn(int x0, int y0) {
-        img = loadImage("pawn_white.png");
+        img = loadImage("Pawn_white.png");
         x = x0;
         y = y0;
     }
