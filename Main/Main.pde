@@ -84,9 +84,9 @@ interface Piece {
 }
 
 class Pawn implements Piece {
-    int x, y;
-    
+    PImage img;
     Pawn(int x0, int y0) {
+        img = loadImage("pawn_white.png");
         x = x0;
         y = y0;
     }
@@ -98,8 +98,9 @@ class Pawn implements Piece {
     }
 }
 class Bishiop implements Piece {
-    
+    PImage img;
     Bishiop(int x0, int y0) {
+        img = loadImage("Bishop_white.png");
         x = x0;
         y = y0;
     }
@@ -111,8 +112,9 @@ class Bishiop implements Piece {
     }
 }
 class Knight implements Piece {
-    
+    PImage img;
     Knight(int x0, int y0) {
+        img = loadImage("Knight_white.png");
         x = x0;
         y = y0;
     }
@@ -124,8 +126,9 @@ class Knight implements Piece {
     }
 }
 class King implements Piece {
-    
+    PImage img;
     King(int x0, int y0) {
+        img = loadImage("King_white.png");
         x = x0;
         y = y0;
     }
@@ -137,8 +140,9 @@ class King implements Piece {
     }
 }
 class Queen implements Piece {
-    
+    PImage = img;
     Queen(int x0, int y0) {
+        img = loadImage("Queen_white.png");
         x = x0;
         y = y0;
     }
@@ -150,8 +154,9 @@ class Queen implements Piece {
     }
 }
 class Rook implements Piece {
-    
+    PImage img;
     Rook(int x0, int y0) {
+        img = loadImage("Rook_white.png");
         x = x0;
         y = y0;
     }
