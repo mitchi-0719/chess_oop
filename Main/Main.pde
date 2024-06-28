@@ -58,32 +58,31 @@ class Board {
 abstract class Piece {
   boolean isUsed = true;
   boolean isClicked = false;
-  int x = 0;
-  int y = 0;
+  int playerID;
   PImage img;
 
   double[] calcMoveableArea();
   void move();
 
-  static Piece create(int x0, int y0, String type,int id) {
+  static Piece create(String type,int id) {
     switch(type) {
     case Pawn:
-      return Pawn(x0, y0,id);
+      return Pawn(id);
 
     case Bishiop:
-      return Bishiop(x0, y0,id);
+      return Bishiop(id);
 
     case Knight:
-      return Knight(x0, y0,id);
+      return Knight(id);
 
     case King:
-      return King(x0, y0,id);
+      return King(id);
 
     case Queen:
-      return Queen(x0, y0,id);
+      return Queen(id);
 
     case Rook:
-      return Rook(x0, y0,id);
+      return Rook(id);
 
     default :
       throw new IllegalArgumentException("type is an invalid value.");
@@ -93,10 +92,9 @@ abstract class Piece {
 
 class Pawn extends Piece {
 
-  Pawn(int x0, int y0) {
+  Pawn(int id) {
     img = loadImage("Pawn_white.png");
-    x = x0;
-    y = y0;
+    playerID = id;
   }
 
   double[] calcMoveableArea() {
@@ -107,10 +105,9 @@ class Pawn extends Piece {
 }
 class Bishiop extends Piece {
 
-  Bishiop(int x0, int y0) {
+  Bishiop(int id) {
     img = loadImage("Bishop_white.png");
-    x = x0;
-    y = y0;
+    playerID = id;
   }
 
   double[] calcMoveableArea() {
@@ -121,10 +118,9 @@ class Bishiop extends Piece {
 }
 class Knight extends Piece {
 
-  Knight(int x0, int y0) {
+  Knight(int id) {
     img = loadImage("Knight_white.png");
-    x = x0;
-    y = y0;
+    playerID = id;
   }
 
   double[] calcMoveableArea() {
@@ -135,10 +131,9 @@ class Knight extends Piece {
 }
 class King extends Piece {
 
-  King(int x0, int y0) {
+  King(int id) {
     img = loadImage("King_white.png");
-    x = x0;
-    y = y0;
+    playerID = id;
   }
 
   double[] calcMoveableArea() {
@@ -149,10 +144,9 @@ class King extends Piece {
 }
 class Queen extends Piece {
   
-  Queen(int x0, int y0) {
+  Queen(int id) {
     img = loadImage("Queen_white.png");
-    x = x0;
-    y = y0;
+    playerID = id;
   }
 
   double[] calcMoveableArea() {
@@ -163,10 +157,9 @@ class Queen extends Piece {
 }
 class Rook extends Piece {
 
-  Rook(int x0, int y0) {
+  Rook(int id) {
     img = loadImage("Rook_white.png");
-    x = x0;
-    y = y0;
+    playerID = id;
   }
 
   double[] calcMoveableArea() {
