@@ -66,22 +66,22 @@ abstract class Piece {
 
   static Piece create(String type,int id) {
     switch(type) {
-    case Pawn:
+    case "Pawn":
       return Pawn(id);
 
-    case Bishiop:
+    case "Bishiop":
       return Bishiop(id);
 
-    case Knight:
+    case "Knight":
       return Knight(id);
 
-    case King:
+    case "King":
       return King(id);
 
-    case Queen:
+    case "Queen":
       return Queen(id);
 
-    case Rook:
+    case "Rook":
       return Rook(id);
 
     default :
