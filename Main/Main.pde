@@ -55,34 +55,35 @@ class Board {
 }
 
 
-interface Piece {
+abstract class Piece {
   boolean isUsed = true;
   boolean isClicked = false;
   int x = 0;
   int y = 0;
+  PImage img;
 
   double[] calcMoveableArea();
   void move();
 
-  static Piece create(int x0, int y0, int type) {
+  static Piece create(int x0, int y0, String type,int id) {
     switch(type) {
-    case 0:
-      return newPawn(x0, y0);
+    case Pawn:
+      return Pawn(x0, y0,id);
 
-    case 1:
-      return newBishiop(x0, y0);
+    case Bishiop:
+      return Bishiop(x0, y0,id);
 
-    case 2:
-      return newKnight(x0, y0);
+    case Knight:
+      return Knight(x0, y0,id);
 
-    case 3:
-      return newKing(x0, y0);
+    case King:
+      return King(x0, y0,id);
 
-    case 4:
-      return newQueen(x0, y0);
+    case Queen:
+      return Queen(x0, y0,id);
 
-    case 5:
-      return newRook(x0, y0);
+    case Rook:
+      return Rook(x0, y0,id);
 
     default :
       throw new IllegalArgumentException("type is an invalid value.");
@@ -90,8 +91,8 @@ interface Piece {
   }
 }
 
-class Pawn implements Piece {
-  PImage img;
+class Pawn extends Piece {
+
   Pawn(int x0, int y0) {
     img = loadImage("Pawn_white.png");
     x = x0;
@@ -104,8 +105,8 @@ class Pawn implements Piece {
   void move() {
   }
 }
-class Bishiop implements Piece {
-  PImage img;
+class Bishiop extends Piece {
+
   Bishiop(int x0, int y0) {
     img = loadImage("Bishop_white.png");
     x = x0;
@@ -118,8 +119,8 @@ class Bishiop implements Piece {
   void move() {
   }
 }
-class Knight implements Piece {
-  PImage img;
+class Knight extends Piece {
+
   Knight(int x0, int y0) {
     img = loadImage("Knight_white.png");
     x = x0;
@@ -132,8 +133,8 @@ class Knight implements Piece {
   void move() {
   }
 }
-class King implements Piece {
-  PImage img;
+class King extends Piece {
+
   King(int x0, int y0) {
     img = loadImage("King_white.png");
     x = x0;
@@ -146,8 +147,8 @@ class King implements Piece {
   void move() {
   }
 }
-class Queen implements Piece {
-  PImage = img;
+class Queen extends Piece {
+  
   Queen(int x0, int y0) {
     img = loadImage("Queen_white.png");
     x = x0;
@@ -160,8 +161,8 @@ class Queen implements Piece {
   void move() {
   }
 }
-class Rook implements Piece {
-  PImage img;
+class Rook extends Piece {
+
   Rook(int x0, int y0) {
     img = loadImage("Rook_white.png");
     x = x0;
