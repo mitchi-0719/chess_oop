@@ -3,6 +3,8 @@ class Board {
     int cellWidth = 100;
     Piece[][] boardArray = new Piece[size][];
     
+    String [] defaultBoard = {"Rook","Knight","Bishop","King","Queen","Bishop","Knight","Rook"};
+    
     Board() {
         for (int i = 0; i < size; ++i) {
             boardArray[i] = new Piece[size];
