@@ -3,7 +3,10 @@ abstract class Piece {
   boolean isClicked = false;
   int playerID;
   PImage img;
-
+  
+  void display(double x,double y,int w){
+    image(img, x, y, w, w);
+  }
   abstract double[] calcMoveableArea();
   abstract void move();
 }
