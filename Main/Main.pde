@@ -4,8 +4,7 @@ abstract class Piece {
   int playerID;
   PImage img;
 
-  abstract double[] calcMoveableArea(Piece[][] boardArray, int size);
-  abstract void move(int x, int y);
+  abstract int[][] calcMoveableArea(int x, int y, Piece[][] boardArray);
 }
 
 class Pawn extends Piece {
@@ -18,10 +17,43 @@ class Pawn extends Piece {
     playerID = id;
   }
 
-  double[] calcMoveableArea() {
+  int[][] calcMoveableArea(int x, int y, Piece[][] boardArray) {
+    int[][] moves = new int[4][2];
+    int dir = (playerID == 0) ? 1 : -1;
+    for (int i = 0; i < moves.length; i++) {
+      moves[i][0] = -1;
+      moves[i][1] = -1;
+    }
+    if (x + dir >= 0 && x + dir < boardArray.length && boardArray[x + dir][y] == null) {
+      moves[0][0] = x + dir;
+      moves[0][1] = y;
+    }
+    if ((playerID == 0 && x == 1) || (playerID == 1 && x == 6)) {
+      if (boardArray[x + dir][y] == null && boardArray[x + 2 * dir][y] == null) {
+        moves[1][0] = x + 2 * dir;
+        moves[1][1] = y;
+      }
+    }
+
+    if (x + dir >= 0 && x + dir < boardArray.length) {
+      if (y - 1 >= 0 && boardArray[x + dir][y - 1] != null && boardArray[x + dir][y - 1].playerID != playerID) {
+        moves[2][0] = x + dir;
+        moves[2][1] = y - 1;
+      }
+      if (y + 1 < boardArray.length && boardArray[x + dir][y + 1] != null && boardArray[x + dir][y + 1].playerID != playerID) {
+        moves[3][0] = x + dir;
+        moves[3][1] = y + 1;
+      }
+    }
+
+    return moves;
   }
 
-  void move(int x, int y) {
+  Piece promote(int x, int y) {
+    if ((playerID == 0 && x == 7) || (playerID == 1 && x == 0)) {
+      return new Queen(playerID);
+    }
+    return this;
   }
 }
 
@@ -35,10 +67,40 @@ class Bishop extends Piece {
     playerID = id;
   }
 
-  double[] calcMoveableArea() {
-  }
+  int[][] calcMoveableArea(int x, int y, Piece[][] boardArray) {
+    int[][] moves = new int[14][2];
+    int index = 0;
 
-  void move(int x, int y) {
+    for (int i = 0; i < moves.length; i++) {
+      moves[i][0] = -1;
+      moves[i][1] = -1;
+    }
+
+    int[] dx = {-1, -1, 1, 1};
+    int[] dy = {-1, 1, -1, 1};
+
+    for (int d = 0; d < 4; d++) {
+      int nx = x + dx[d];
+      int ny = y + dy[d];
+      while (nx >= 0 && nx < boardArray.length && ny >= 0 && ny < boardArray.length) {
+        if (boardArray[nx][ny] == null) {
+          moves[index][0] = nx;
+          moves[index][1] = ny;
+          index++;
+        } else {
+          if (boardArray[nx][ny].playerID != playerID) {
+            moves[index][0] = nx;
+            moves[index][1] = ny;
+            index++;
+          }
+          break;
+        }
+        nx += dx[d];
+        ny += dy[d];
+      }
+    }
+
+    return moves;
   }
 }
 
@@ -52,11 +114,29 @@ class Knight extends Piece {
     playerID = id;
   }
 
-  double[] calcMoveableArea() {
-    return new double[0]; // サンプル実装
-  }
+  int[][] calcMoveableArea(int x, int y, Piece[][] boardArray) {
+    int[][] moves = new int[8][2];
+    int[][] possibleMoves = {{-2, -1}, {-2, 1}, {-1, -2}, {-1, 2}, {1, -2}, {1, 2}, {2, -1}, {2, 1}};
 
-  void move(int x, int y) {
+    for (int i = 0; i < moves.length; i++) {
+      moves[i][0] = -1;
+      moves[i][1] = -1;
+    }
+
+    int index = 0;
+    for (int[] pm : possibleMoves) {
+      int nx = x + pm[0];
+      int ny = y + pm[1];
+      if (nx >= 0 && nx < boardArray.length && ny >= 0 && ny < boardArray.length) {
+        if (boardArray[nx][ny] == null || boardArray[nx][ny].playerID != playerID) {
+          moves[index][0] = nx;
+          moves[index][1] = ny;
+          index++;
+        }
+      }
+    }
+
+    return moves;
   }
 }
 
@@ -70,11 +150,29 @@ class King extends Piece {
     playerID = id;
   }
 
-  double[] calcMoveableArea() {
-    return new double[0]; // サンプル実装
-  }
+  int[][] calcMoveableArea(int x, int y, Piece[][] boardArray) {
+    int[][] moves = new int[8][2];
+    int[][] possibleMoves = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
 
-  void move(int x, int y) {
+    for (int i = 0; i < moves.length; i++) {
+      moves[i][0] = -1;
+      moves[i][1] = -1;
+    }
+
+    int index = 0;
+    for (int[] pm : possibleMoves) {
+      int nx = x + pm[0];
+      int ny = y + pm[1];
+      if (nx >= 0 && nx < boardArray.length && ny >= 0 && ny < boardArray.length) {
+        if (boardArray[nx][ny] == null || boardArray[nx][ny].playerID != playerID) {
+          moves[index][0] = nx;
+          moves[index][1] = ny;
+          index++;
+        }
+      }
+    }
+
+    return moves;
   }
 }
 
@@ -88,11 +186,40 @@ class Queen extends Piece {
     playerID = id;
   }
 
-  double[] calcMoveableArea() {
-    return new double[0]; // サンプル実装
-  }
+  int[][] calcMoveableArea(int x, int y, Piece[][] boardArray) {
+    int[][] moves = new int[27][2];
+    int index = 0;
 
-  void move(int x, int y) {
+    for (int i = 0; i < moves.length; i++) {
+      moves[i][0] = -1;
+      moves[i][1] = -1;
+    }
+
+    int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
+    int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};
+
+    for (int d = 0; d < 8; d++) {
+      int nx = x + dx[d];
+      int ny = y + dy[d];
+      while (nx >= 0 && nx < boardArray.length && ny >= 0 && ny < boardArray.length) {
+        if (boardArray[nx][ny] == null) {
+          moves[index][0] = nx;
+          moves[index][1] = ny;
+          index++;
+        } else {
+          if (boardArray[nx][ny].playerID != playerID) {
+            moves[index][0] = nx;
+            moves[index][1] = ny;
+            index++;
+          }
+          break;
+        }
+        nx += dx[d];
+        ny += dy[d];
+      }
+    }
+
+    return moves;
   }
 }
 
@@ -106,63 +233,88 @@ class Rook extends Piece {
     playerID = id;
   }
 
-  double[] calcMoveableArea() {
-    return new double[0]; // サンプル実装
-  }
+  int[][] calcMoveableArea(int x, int y, Piece[][] boardArray) {
+    int[][] moves = new int[14][2];
+    int index = 0;
 
-  void move(int x, int y) {
+    for (int i = 0; i < moves.length; i++) {
+      moves[i][0] = -1;
+      moves[i][1] = -1;
+    }
+
+    int[] dx = {-1, 1, 0, 0};
+    int[] dy = {0, 0, -1, 1};
+
+    for (int d = 0; d < 4; d++) {
+      int nx = x + dx[d];
+      int ny = y + dy[d];
+      while (nx >= 0 && nx < boardArray.length && ny >= 0 && ny < boardArray.length) {
+        if (boardArray[nx][ny] == null) {
+          moves[index][0] = nx;
+          moves[index][1] = ny;
+          index++;
+        } else {
+          if (boardArray[nx][ny].playerID != playerID) {
+            moves[index][0] = nx;
+            moves[index][1] = ny;
+            index++;
+          }
+          break;
+        }
+        nx += dx[d];
+        ny += dy[d];
+      }
+    }
+
+    return moves;
   }
 }
 
+
 class Board {
+  Piece[][] boardArray;
   int size = 8;
-  int cellWidth = 100;
-  Piece[][] boardArray = new Piece[size][size];
-  String[] defaultBoard = {"Rook", "Knight", "Bishiop", "King", "Queen", "Bishiop", "Knight", "Rook"};
 
   Board() {
-    for (int i = 0; i < size; ++i) {
-      boardArray[i] = new Piece[size];
-      for (int j = 0; j < size; ++j) {
-        Piece p;
-        if (i == 0) {
-          boardArray[i][j] = getPiece(defaultBoard[j], 0);
-        } else if (i == 1) {
-          boardArray[i][j] = getPiece("Pawn", 0);
-        } else if (i == size - 2) {
-          boardArray[i][j] = getPiece("Pawn", 1);
-        } else if (i == size - 1) {
-          boardArray[i][j] = getPiece(defaultBoard[j], 1);
-        } else {
-          boardArray[i][j] = null;
-        }
-      }
-    }
+    boardArray = new Piece[size][size];
+    initializePieces();
   }
 
-  Piece getPiece(String type, int id) {
-    switch(type) {
-    case "Pawn":
-      return new Pawn(id);
-
-    case "Bishiop":
-      return new Bishop(id);
-
-    case "Knight":
-      return new Knight(id);
-
-    case "King":
-      return new King(id);
-
-    case "Queen":
-      return new Queen(id);
-
-    case "Rook":
-      return new Rook(id);
-
-    default:
-      throw new IllegalArgumentException("type is an invalid value.");
+  void initializePieces() {
+    for (int i = 0; i < size; i++) {
+      boardArray[1][i] = new Pawn(0);
+      boardArray[6][i] = new Pawn(1);
     }
+
+    boardArray[0][0] = new Rook(0);
+    boardArray[0][7] = new Rook(0);
+    boardArray[7][0] = new Rook(1);
+    boardArray[7][7] = new Rook(1);
+
+    boardArray[0][1] = new Knight(0);
+    boardArray[0][6] = new Knight(0);
+    boardArray[7][1] = new Knight(1);
+    boardArray[7][6] = new Knight(1);
+
+    boardArray[0][2] = new Bishop(0);
+    boardArray[0][5] = new Bishop(0);
+    boardArray[7][2] = new Bishop(1);
+    boardArray[7][5] = new Bishop(1);
+
+    boardArray[0][3] = new Queen(0);
+    boardArray[7][3] = new Queen(1);
+
+    boardArray[0][4] = new King(0);
+    boardArray[7][4] = new King(1);
+  }
+
+  void reset() {
+    for (int i= 0; i < size; i++) {
+      for (int j = 0; j < size; j++) {
+        boardArray[i][j] = null;
+      }
+    }
+    initializePieces();
   }
 
   void displayBoard() {
@@ -243,7 +395,6 @@ class Board {
       for (int j = 0; j < size; j++) {
         Piece p = boardArray[i][j];
         if (p != null) {
-
           int xPos = boardX + j * d;
           int yPos = boardY + i * d;
 
@@ -254,57 +405,222 @@ class Board {
   }
 
   Piece getPiece(int x, int y) {
+    if (x >= 0 && x < size && y >= 0 && y < size) {
+      return boardArray[x][y];
+    }
     return null;
   }
 
   void setPiece(int x, int y, Piece p) {
+    if (x >= 0 && x < size && y >= 0 && y < size) {
+      boardArray[x][y] = p;
+    }
   }
 
   void displayMoveableArea(int x, int y, int[][] move) {
+    int d = 100;
+    int boardX = 200;
+    int boardY = height / 2 - 4 * d;
+
+    fill(255, 0, 0, 127);
+    for (int[] m : move) {
+      if (m[0] != -1 || m[1] != -1) {
+        int xPos = boardX + m[1] * d + d / 2;
+        int yPos = boardY + m[0] * d + d / 2;
+        ellipse(xPos, yPos, d / 2, d / 2);
+      }
+    }
   }
 
   void movePiece(int x1, int y1, int x2, int y2) {
-  }
-
-  void calcIndex(double mx, double my) {
-  }
-
-  void capturePiece(int x, int y) {
-  }
-}
-
-class User {
-  HashMap<String, Integer> capturedPecies = new HashMap<>();
-  boolean isAdvance;
-
-  void useCapturedPieces(String type) {
+    Piece p = getPiece(x1, y1);
+    if (p != null) {
+      setPiece(x2, y2, p instanceof Pawn ? ((Pawn) p).promote(x2, y2) : p);
+      setPiece(x1, y1, null);
+    }
   }
 }
+
 
 class Game {
   boolean isAdvancedTurn;
-  User[] user;
   int now;
+  int selectedX = -1;
+  int selectedY = -1;
+  int[][] moveableArea = new int[0][0];
 
   Game() {
-    user = new User[2];
     now = 0;
   }
+
   void next() {
-    now = (now+1)%2;
+    now = (now + 1) % 2;
+  }
+
+  void selectPiece(int x, int y) {
+    Piece selectedPiece = board.getPiece(x, y);
+    if (selectedPiece != null && selectedPiece.playerID == now) {
+      selectedX = x;
+      selectedY = y;
+      moveableArea = selectedPiece.calcMoveableArea(x, y, board.boardArray);
+    } else {
+      selectedX = -1;
+      selectedY = -1;
+      moveableArea = new int[0][0];
+    }
+  }
+
+  void movePiece(int x, int y) {
+    for (int[] move : moveableArea) {
+      if (move[0] == x && move[1] == y) {
+        Piece targetPiece = board.getPiece(x, y);
+        if (targetPiece instanceof King) {
+          if (targetPiece.playerID == now) {
+            return;
+          }
+          ww = (now == 0) ? 1 : 0;
+          gamemode = 2;
+          board.movePiece(selectedX, selectedY, x, y);
+          return;
+        }
+        board.movePiece(selectedX, selectedY, x, y);
+        next();
+        break;
+      }
+    }
+    selectedX = -1;
+    selectedY = -1;
+    moveableArea = new int[0][0];
+  }
+
+
+  void reset() {
+    board.reset();
+    now = 0;
+    selectedX = -1;
+    selectedY = -1;
+    moveableArea = new int[0][0];
   }
 }
 
+abstract class Start {
+  String start, chess;
+  int time;
+  abstract void display();
+  abstract void restart();
+}
+
+class Modestart extends Start {
+  Modestart() {
+    start = "Start!!";
+    time = 0;
+  }
+
+  void display() {
+    textAlign(CENTER);
+    int sx = width/2, sy = height-300;
+    fill(255);
+    if (mouseX > sx-120 && mouseX < sx+120 && mouseY > sy-60 && mouseY < sy) {
+      textSize(100+cos(time));
+      if (mousePressed) {
+        gamemode = 0;
+      }
+    } else {
+      textSize(120);
+    }
+    text(start, sx, sy);
+  }
+
+  void restart() {
+    if (gamemode == 2) {
+      textAlign(CENTER);
+      int sx = width/2, sy = 200;
+      fill(255);
+      if (mouseX > sx-120 && mouseX < sx+120 && mouseY > sy-60 && mouseY < sy) {
+        textSize(100+cos(time));
+        if (mousePressed) {
+          gamemode = 1;
+          game.reset();
+        }
+      } else {
+        textSize(120);
+      }
+      text("ReStart", sx, sy);
+    }
+  }
+}
+
+class Modechess extends Start {
+  Modechess() {
+    chess = "Chess";
+    time = 0;
+  }
+  void display() {
+    textAlign(CENTER);
+    textSize(150+sin(time));
+    fill(255);
+    text(chess, width/2, 300);
+  }
+  void restart() {
+  }
+}
+
+int gamemode = 1;
+PImage bgImage;
+int ww;
+
 Game game;
 Board board;
+Start s1, s2;
 
 void setup() {
   size(1200, 800);
   game = new Game();
   board = new Board();
+  s1 = new Modestart();
+  s2 = new Modechess();
+  bgImage = loadImage("background.jpeg");
+  bgImage.resize(1200, 800);
 }
 
 void draw() {
-  board.displayBoard();
-  board.displayPiece();
+  if (gamemode == 2) {
+    background(bgImage);
+    String winner = (ww == 0) ? "Player 2 Wins!" : "Player 1 Wins!";
+    textAlign(CENTER, CENTER);
+    textSize(150);
+    fill(255);
+    text(winner, width / 2, height / 2);
+    s1.restart();
+    s1.time += 1;
+  } else if (gamemode == 1) {
+    background(bgImage);
+    s1.display();
+    s2.time += 1;
+    s1.time += 1;
+    s2.display();
+  } else {
+    board.displayBoard();
+    board.displayPiece();
+    if (game.selectedX != -1 && game.selectedY != -1) {
+      board.displayMoveableArea(game.selectedX, game.selectedY, game.moveableArea);
+    }
+  }
+}
+
+void mousePressed() {
+  int d = 100;
+  int boardX = 200;
+  int boardY = height / 2 - 4 * d;
+
+  int x = (mouseY - boardY) / d;
+  int y = (mouseX - boardX) / d;
+
+  if (x >= 0 && x < 8 && y >= 0 && y < 8) {
+    if (game.selectedX == -1 && game.selectedY == -1) {
+      game.selectPiece(x, y);
+    } else {
+      game.movePiece(x, y);
+    }
+  }
 }
