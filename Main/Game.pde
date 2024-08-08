@@ -34,7 +34,7 @@ class Game {
             return;
           }
           ww = (now == 0) ? 1 : 0;
-          gamemode = 2;
+          mode.gameMode = 2;
           board.movePiece(selectedX, selectedY, x, y);
           return;
         }
