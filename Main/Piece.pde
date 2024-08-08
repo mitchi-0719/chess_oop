@@ -1,6 +1,4 @@
 abstract class Piece {
-  boolean isUsed = true;
-  boolean isClicked = false;
   int playerID;
   PImage img;
 

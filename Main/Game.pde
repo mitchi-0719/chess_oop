@@ -1,5 +1,4 @@
 class Game {
-  boolean isAdvancedTurn;
   int now;
   int selectedX = -1;
   int selectedY = -1;
