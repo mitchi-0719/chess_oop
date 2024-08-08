@@ -503,15 +503,15 @@ class Game {
   }
 }
 
-abstract class Start {
+abstract class Mode {
   String start, chess;
   int time;
   abstract void display();
   abstract void restart();
 }
 
-class Modestart extends Start {
-  Modestart() {
+class ModeStart extends Mode {
+  ModeStart() {
     start = "Start!!";
     time = 0;
   }
@@ -550,8 +550,8 @@ class Modestart extends Start {
   }
 }
 
-class Modechess extends Start {
-  Modechess() {
+class ModeChess extends Mode {
+  ModeChess() {
     chess = "Chess";
     time = 0;
   }
@@ -571,14 +571,14 @@ int ww;
 
 Game game;
 Board board;
-Start s1, s2;
+Mode s1, s2;
 
 void setup() {
   size(1200, 800);
   game = new Game();
   board = new Board();
-  s1 = new Modestart();
-  s2 = new Modechess();
+  s1 = new ModeStart();
+  s2 = new ModeChess();
   bgImage = loadImage("background.jpeg");
   bgImage.resize(1200, 800);
 }
