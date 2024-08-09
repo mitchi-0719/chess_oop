@@ -11,6 +11,7 @@ class Mode {
   }
 
   void display(){
+    time++;
     background(bgImage);
     if (gameMode == 0) {
       displayStart();
@@ -23,7 +24,7 @@ class Mode {
 
   void displayStart(){
     textAlign(CENTER);
-    textSize(150+sin(time));
+    textSize(150+cos(time));
     fill(255);
     text(chess, width/2, 300);
 
@@ -36,7 +37,7 @@ class Mode {
         gameMode = 1;
       }
     } else {
-      textSize(120);
+      textSize(120+cos(time));
     }
     text(start, sx, sy);
   }
@@ -53,7 +54,7 @@ class Mode {
     background(bgImage);
     finish = (ww == 0) ? "Player 2 Wins!" : "Player 1 Wins!";
     textAlign(CENTER, CENTER);
-    textSize(150);
+    textSize(150+cos(time));
     fill(255);
     text(finish, width / 2, height / 2);
 
@@ -66,7 +67,7 @@ class Mode {
         game.reset();
       }
     } else {
-      textSize(120);
+      textSize(120+cos(time));
     }
     text("ReStart", sx, sy);
   }
